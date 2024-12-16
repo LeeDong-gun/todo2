@@ -3,8 +3,11 @@ package com.example.todo2.service;
 
 import com.example.todo2.dto.TodoResponseDto;
 import com.example.todo2.dto.UpdateTodoRequestDto;
+import com.example.todo2.dto.UserWithEmailResponseDto;
 import com.example.todo2.entity.Todo;
+import com.example.todo2.entity.User;
 import com.example.todo2.repository.TodoRepository;
+import com.example.todo2.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -17,6 +20,7 @@ import java.util.List;
 public class TodoServiceImpl implements TodoService {
 
     private final TodoRepository todoRepository;
+    private final UserRepository userRepository;
 
     /**
      * 일정생성
@@ -27,10 +31,13 @@ public class TodoServiceImpl implements TodoService {
      */
     @Override
     public TodoResponseDto todoSave(String username, String title, String contents) {
-        Todo todo = new Todo(username, title, contents);
+        User findUser = userRepository.findUserByUsernameOrElseThrow(username);
+
+        Todo todo = new Todo(title, contents);
+        todo.setUser(findUser);
 
         Todo saveTodo = todoRepository.save(todo);
-        return new TodoResponseDto(saveTodo.getId(), saveTodo.getUsername(), saveTodo.getTitle(), saveTodo.getContents(), saveTodo.getCreatedAt(), saveTodo.getUpdatedAt());
+        return new TodoResponseDto(saveTodo.getId(), saveTodo.getTitle(), saveTodo.getContents(), saveTodo.getCreatedAt(), saveTodo.getUpdatedAt());
     }
 
     /**
@@ -48,11 +55,12 @@ public class TodoServiceImpl implements TodoService {
      * @return
      */
     @Override
-    public TodoResponseDto findById(Long id) {
-
+    public UserWithEmailResponseDto findById(Long id) {
         Todo findTodo = todoRepository.findByIdOrElseThrow(id);
 
-        return new TodoResponseDto(findTodo.getId(), findTodo.getUsername(), findTodo.getTitle(), findTodo.getContents(), findTodo.getCreatedAt(), findTodo.getUpdatedAt());
+        User writer = findTodo.getUser();
+
+        return new UserWithEmailResponseDto(findTodo.getTitle(), findTodo.getContents(),writer.getEmail() , findTodo.getCreatedAt(), findTodo.getUpdatedAt());
     }
 
     /**

@@ -3,6 +3,7 @@ package com.example.todo2.controller;
 import com.example.todo2.dto.CreateTodoRequestDto;
 import com.example.todo2.dto.TodoResponseDto;
 import com.example.todo2.dto.UpdateTodoRequestDto;
+import com.example.todo2.dto.UserWithEmailResponseDto;
 import com.example.todo2.service.TodoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -34,7 +35,6 @@ public class TodoController {
 
     /**
      * 일정 전체 조회
-     *
      * @return
      */
     @GetMapping
@@ -50,8 +50,8 @@ public class TodoController {
      * @return
      */
     @GetMapping("/{id}")
-    public ResponseEntity<TodoResponseDto> findById(@PathVariable Long id) {
-        TodoResponseDto byId = todoService.findById(id);
+    public ResponseEntity<UserWithEmailResponseDto> findById(@PathVariable Long id) {
+        UserWithEmailResponseDto byId = todoService.findById(id);
         return new ResponseEntity<>(byId, HttpStatus.OK);
     }
 
@@ -70,6 +70,11 @@ public class TodoController {
         return ResponseEntity.ok(todoService.updatrTodo(id, requestDto));
     }
 
+    /**
+     * 일정 삭제
+     * @param id
+     * @return
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTodo(@PathVariable Long id) {
         todoService.delete(id);

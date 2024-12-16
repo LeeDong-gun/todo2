@@ -1,7 +1,7 @@
 package com.example.todo2.entity;
 
-import com.example.todo2.dto.TodoResponseDto;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,22 +15,31 @@ public class Todo extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String username;
+//    @NotBlank
+//    @Column(length = 30)
+//    private String username;
 
-    @Column(nullable = false)
+    @NotBlank
+    @Column(length = 50)
     private String title;
 
-    @Column(nullable = false)
+    @NotBlank
+    @Column(length = 100)
     private String contents;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Todo() {
     }
 
-    public Todo (String username, String title, String contents) {
-        this.username = username;
+    public Todo ( String title, String contents) {
         this.title = title;
         this.contents = contents;
     }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
 }
