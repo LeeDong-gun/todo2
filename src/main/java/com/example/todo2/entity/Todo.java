@@ -19,11 +19,11 @@ public class Todo extends BaseEntity {
 //    @Column(length = 30)
 //    private String username;
 
-    @NotBlank
+
     @Column(length = 50)
     private String title;
 
-    @NotBlank
+
     @Column(length = 100)
     private String contents;
 

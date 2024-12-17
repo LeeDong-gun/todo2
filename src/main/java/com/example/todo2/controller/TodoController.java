@@ -5,6 +5,7 @@ import com.example.todo2.dto.TodoResponseDto;
 import com.example.todo2.dto.UpdateTodoRequestDto;
 import com.example.todo2.dto.UserWithEmailResponseDto;
 import com.example.todo2.service.TodoService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ public class TodoController {
      * @return
      */
     @PostMapping
-    public ResponseEntity<TodoResponseDto> todoSave(@RequestBody CreateTodoRequestDto requestDto) {
+    public ResponseEntity<TodoResponseDto> todoSave(@Valid @RequestBody CreateTodoRequestDto requestDto) {
 
         TodoResponseDto todoResponseDto = todoService.todoSave(requestDto.getUsername(), requestDto.getTitle(), requestDto.getContents());
 

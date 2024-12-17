@@ -4,6 +4,7 @@ import com.example.todo2.dto.*;
 import com.example.todo2.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,7 @@ public class UserController {
      * @return
      */
     @PostMapping("/signup")
-    public ResponseEntity<UserResponsDto> userSave(@RequestBody CreateUserRequestDto requestDto) {
+    public ResponseEntity<UserResponsDto> userSave(@Valid @RequestBody CreateUserRequestDto requestDto) {
         UserResponsDto userResponsDto = userService.userSave(requestDto.getUsername(), requestDto.getPassword(), requestDto.getEmail());
 
         return new ResponseEntity<>(userResponsDto, HttpStatus.CREATED);
