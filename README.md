@@ -9,7 +9,9 @@ API명세서
 | **일정 단건 조회**     | 일정 단건 조회    | GET             | `/todos/{id}`          |                                              |
 | **일정 및 작성자명 수정** | 제목 및 일정 수정  | PATCH           | `/todos/{id}`          | "title": "제목", "contents": "할일"              |
 | **일정 삭제**        | 일정 삭제       | DELETE          | `/todos/{id}`          |                                              |
-| **유저 생성**        | 유저 생성       | POST            | `/users`               |                                              |    
+| **회원가입**         | 회원가입        | POST            | `/users`               |                                              |    
+| **로그인**          | 로그인         | POST            | `/users/login`         | "email": "xxx@xxx.com", "password": "1111"   |    
+| **로그아웃**         | 로그아웃        | POST            | `/users/logout`        |                                              |    
 | **유저 일정 조회**     | 유저 일정 조회    | GET             | `/users`               |                                              |
 | **유저 단건 조회**     | 유저 단건 조회    | GET             | `/users/{id}`          |                                              |
 | **유저 및 작성자명 수정** | 유저 및 이메일 수정 | PATCH           | `/users/{id}`          | "username": "test", "email": "xxx@xxx.com"   |

@@ -1,10 +1,12 @@
 package com.example.todo2.service;
 
 import com.example.todo2.dto.UpdateUserRequestDto;
+import com.example.todo2.dto.UserLoginRequestDto;
 import com.example.todo2.dto.UserResponsDto;
 import com.example.todo2.entity.User;
 import com.example.todo2.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.task.TaskExecutionProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -16,6 +18,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final TaskExecutionProperties taskExecutionProperties;
 
     /**
      * 유저 생성
@@ -96,5 +99,21 @@ public class UserServiceImpl implements UserService {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "이전 비밀번호가 일치하지 않습니다.");
         }
         findUser.updatePassword(newPassword);
+    }
+
+    /**
+     * 로그인
+     * @param requestDto
+     * @return
+     */
+    @Override
+    public boolean login(UserLoginRequestDto requestDto) {
+        User findUser = userRepository.findByEmailOrElseThrow(requestDto.getEmail());
+
+        if (!findUser.getPassword().equals(requestDto.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다.");
+        }
+
+        return true;
     }
 }

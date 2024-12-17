@@ -1,16 +1,13 @@
 package com.example.todo2.controller;
 
-import com.example.todo2.dto.CreateUserRequestDto;
-import com.example.todo2.dto.UpdatePasswordRequestDto;
-import com.example.todo2.dto.UpdateUserRequestDto;
-import com.example.todo2.dto.UserResponsDto;
+import com.example.todo2.dto.*;
 import com.example.todo2.service.UserService;
-import lombok.Getter;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import javax.smartcardio.ResponseAPDU;
 import java.util.List;
 
@@ -22,12 +19,12 @@ public class UserController {
     private final UserService userService;
 
     /**
-     * 유저 생성
+     * 회원가입
      *
      * @param requestDto
      * @return
      */
-    @PostMapping
+    @PostMapping("/signup")
     public ResponseEntity<UserResponsDto> userSave(@RequestBody CreateUserRequestDto requestDto) {
         UserResponsDto userResponsDto = userService.userSave(requestDto.getUsername(), requestDto.getPassword(), requestDto.getEmail());
 
@@ -86,6 +83,7 @@ public class UserController {
 
     /**
      * 비밀번호 변경
+     *
      * @param id
      * @param requestDto
      * @return
@@ -97,5 +95,36 @@ public class UserController {
     ) {
         userService.updatePassword(id, requestDto.getOldPassword(), requestDto.getNewPassword());
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    /**
+     * 로그인
+     *
+     * @param requestDto
+     * @param request
+     * @return
+     */
+    @PostMapping("/login")
+    public ResponseEntity<String> login(
+            @RequestBody UserLoginRequestDto requestDto,
+            HttpServletRequest request
+    ) {
+        boolean loginSuccess = userService.login(requestDto);
+        if (loginSuccess) {
+            HttpSession session = request.getSession();
+            session.setAttribute("user", requestDto);
+            return ResponseEntity.ok("로그인 성공");
+        }
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+
+        if (session != null) {
+            session.invalidate();
+        }
+        return ResponseEntity.ok("로그아웃 되었습니다.");
     }
 }
