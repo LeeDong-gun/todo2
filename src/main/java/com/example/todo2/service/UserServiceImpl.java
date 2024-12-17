@@ -20,12 +20,13 @@ public class UserServiceImpl implements UserService {
     /**
      * 유저 생성
      * @param username
+     * @param password
      * @param email
      * @return
      */
     @Override
-    public UserResponsDto userSave(String username, String email) {
-        User user = new User(username, email);
+    public UserResponsDto userSave(String username, String password, String email) {
+        User user = new User(username, password, email);
         User savedUser = userRepository.save(user);
         return new UserResponsDto(savedUser.getId(), savedUser.getUsername(), savedUser.getEmail(), savedUser.getCreatedAt());
     }
@@ -80,5 +81,20 @@ public class UserServiceImpl implements UserService {
     public void delete(Long id) {
         User deleteUser = userRepository.findByIdOrElseThrow(id);
         userRepository.delete(deleteUser);
+    }
+
+    /**
+     * 비밀번호 변경
+     * @param id
+     * @param oldPassword
+     * @param newPassword
+     */
+    @Override
+    public void updatePassword(Long id, String oldPassword, String newPassword) {
+        User findUser = userRepository.findByIdOrElseThrow(id);
+        if (!findUser.getPassword().equals(oldPassword)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "이전 비밀번호가 일치하지 않습니다.");
+        }
+        findUser.updatePassword(newPassword);
     }
 }

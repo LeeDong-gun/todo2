@@ -1,6 +1,7 @@
 package com.example.todo2.controller;
 
 import com.example.todo2.dto.CreateUserRequestDto;
+import com.example.todo2.dto.UpdatePasswordRequestDto;
 import com.example.todo2.dto.UpdateUserRequestDto;
 import com.example.todo2.dto.UserResponsDto;
 import com.example.todo2.service.UserService;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.smartcardio.ResponseAPDU;
 import java.util.List;
 
 @RestController
@@ -27,7 +29,7 @@ public class UserController {
      */
     @PostMapping
     public ResponseEntity<UserResponsDto> userSave(@RequestBody CreateUserRequestDto requestDto) {
-        UserResponsDto userResponsDto = userService.userSave(requestDto.getUsername(), requestDto.getEmail());
+        UserResponsDto userResponsDto = userService.userSave(requestDto.getUsername(), requestDto.getPassword(), requestDto.getEmail());
 
         return new ResponseEntity<>(userResponsDto, HttpStatus.CREATED);
     }
@@ -72,12 +74,28 @@ public class UserController {
 
     /**
      * 유저 삭제
+     *
      * @param id
      * @return
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    /**
+     * 비밀번호 변경
+     * @param id
+     * @param requestDto
+     * @return
+     */
+    @PatchMapping("/password/{id}")
+    public ResponseEntity<Void> updatePassword(
+            @PathVariable Long id,
+            @RequestBody UpdatePasswordRequestDto requestDto
+    ) {
+        userService.updatePassword(id, requestDto.getOldPassword(), requestDto.getNewPassword());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

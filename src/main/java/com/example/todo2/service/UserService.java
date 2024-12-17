@@ -6,7 +6,7 @@ import com.example.todo2.dto.UserResponsDto;
 import java.util.List;
 
 public interface UserService {
-    UserResponsDto userSave(String username, String email);
+    UserResponsDto userSave(String username,String password , String email);
 
     List<UserResponsDto> findAll();
 
@@ -15,4 +15,6 @@ public interface UserService {
     UserResponsDto updateUser(Long id, UpdateUserRequestDto requestDto);
 
     void delete(Long id);
+
+    void updatePassword(Long id, String oldPassword, String newPassword);
 }
