@@ -2,18 +2,19 @@
 Lv1\
 API명세서
 
-| **기능**           | **설명**      | **HTTP Method** | **Endpoint**  | **body**                                   |
-|------------------|-------------|-----------------|---------------|--------------------------------------------|
-| **일정 생성**        | 일정 생성       | POST            | `/todos`      |                                            |    
-| **전체 일정 조회**     | 전체 일정 조회    | GET             | `/todos`      |                                            |
-| **일정 단건 조회**     | 일정 단건 조회    | GET             | `/todos/{id}` |                                            |
-| **일정 및 작성자명 수정** | 제목 및 일정 수정  | PATCH           | `/todos/{id}` | "title": "제목", "contents": "할일"            |
-| **일정 삭제**        | 일정 삭제       | DELETE          | `/todos/{id}` |                                            |
-| **유저 생성**        | 유저 생성       | POST            | `/users`      |                                            |    
-| **유저 일정 조회**     | 유저 일정 조회    | GET             | `/users`      |                                            |
-| **유저 단건 조회**     | 유저 단건 조회    | GET             | `/users/{id}` |                                            |
-| **유저 및 작성자명 수정** | 유저 및 이메일 수정 | PATCH           | `/users/{id}` | "username": "test", "email": "xxx@xxx.com" |
-| **유저 삭제**        | 유저 삭제       | DELETE          | `/users/{id}` |                                            |
+| **기능**           | **설명**      | **HTTP Method** | **Endpoint**           | **body**                                     |
+|------------------|-------------|-----------------|------------------------|----------------------------------------------|
+| **일정 생성**        | 일정 생성       | POST            | `/todos`               |                                              |    
+| **전체 일정 조회**     | 전체 일정 조회    | GET             | `/todos`               |                                              |
+| **일정 단건 조회**     | 일정 단건 조회    | GET             | `/todos/{id}`          |                                              |
+| **일정 및 작성자명 수정** | 제목 및 일정 수정  | PATCH           | `/todos/{id}`          | "title": "제목", "contents": "할일"              |
+| **일정 삭제**        | 일정 삭제       | DELETE          | `/todos/{id}`          |                                              |
+| **유저 생성**        | 유저 생성       | POST            | `/users`               |                                              |    
+| **유저 일정 조회**     | 유저 일정 조회    | GET             | `/users`               |                                              |
+| **유저 단건 조회**     | 유저 단건 조회    | GET             | `/users/{id}`          |                                              |
+| **유저 및 작성자명 수정** | 유저 및 이메일 수정 | PATCH           | `/users/{id}`          | "username": "test", "email": "xxx@xxx.com"   |
+| **유저 비밀번호 수정**   | 비밀번호 수정     | PATCH           | `/users/password/{id}` | "oldPassword": "1234", "newPassword": "1111" |
+| **유저 삭제**        | 유저 삭제       | DELETE          | `/users/{id}`          |                                              |
 
 
 ERD
@@ -75,6 +76,12 @@ ERD
     <th>username</th>
     <th>Field</th>
     <th>VARCHAR(30)</th>
+  </tr>
+<tr>
+    <th></th>
+    <th>password</th>
+    <th>Field</th>
+    <th>VARCHAR(200)</th>
   </tr>
   <tr>
     <th></th>

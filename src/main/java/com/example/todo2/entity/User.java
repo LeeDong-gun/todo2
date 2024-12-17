@@ -25,12 +25,21 @@ public class User extends BaseEntity {
     @Column(length = 50)
     private String email;
 
-    public User (String username, String email) {
+    @NotBlank
+    @Column(length = 200)
+    private String password;
+
+    public User (String username, String password, String email) {
         this.username = username;
+        this.password = password;
         this.email = email;
     }
 
     public User() {
 
+    }
+
+    public void updatePassword(String password) {
+        this.password = password;
     }
 }
