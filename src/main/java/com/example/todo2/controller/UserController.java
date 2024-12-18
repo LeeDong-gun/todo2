@@ -34,7 +34,6 @@ public class UserController {
 
     /**
      * 유저 전체 조회
-     *
      * @return
      */
     @GetMapping
@@ -100,7 +99,6 @@ public class UserController {
 
     /**
      * 로그인
-     *
      * @param requestDto
      * @param request
      * @return
@@ -119,6 +117,11 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
+    /**
+     * 로그아웃
+     * @param request
+     * @return
+     */
     @PostMapping("/logout")
     public ResponseEntity<String> logout(HttpServletRequest request) {
         HttpSession session = request.getSession(false);

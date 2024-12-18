@@ -1,12 +1,12 @@
 package com.example.todo2.service;
 
+import com.example.todo2.config.PasswordEncoder;
 import com.example.todo2.dto.UpdateUserRequestDto;
 import com.example.todo2.dto.UserLoginRequestDto;
 import com.example.todo2.dto.UserResponsDto;
 import com.example.todo2.entity.User;
 import com.example.todo2.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.task.TaskExecutionProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -18,7 +18,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final TaskExecutionProperties taskExecutionProperties;
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * 유저 생성
@@ -29,7 +29,8 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public UserResponsDto userSave(String username, String password, String email) {
-        User user = new User(username, password, email);
+        String encodePassword = passwordEncoder.encode(password);
+        User user = new User(username, encodePassword, email);
         User savedUser = userRepository.save(user);
         return new UserResponsDto(savedUser.getId(), savedUser.getUsername(), savedUser.getEmail(), savedUser.getCreatedAt());
     }
@@ -95,10 +96,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updatePassword(Long id, String oldPassword, String newPassword) {
         User findUser = userRepository.findByIdOrElseThrow(id);
-        if (!findUser.getPassword().equals(oldPassword)) {
+        if (!passwordEncoder.matches(oldPassword, findUser.getPassword())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "이전 비밀번호가 일치하지 않습니다.");
         }
-        findUser.updatePassword(newPassword);
+        findUser.updatePassword(passwordEncoder.encode(newPassword));
     }
 
     /**
@@ -110,7 +111,7 @@ public class UserServiceImpl implements UserService {
     public boolean login(UserLoginRequestDto requestDto) {
         User findUser = userRepository.findByEmailOrElseThrow(requestDto.getEmail());
 
-        if (!findUser.getPassword().equals(requestDto.getPassword())) {
+        if (!passwordEncoder.matches(requestDto.getPassword(), findUser.getPassword())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다.");
         }
 

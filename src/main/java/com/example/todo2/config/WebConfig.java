@@ -1,4 +1,4 @@
-package com.example.todo2.web;
+package com.example.todo2.config;
 
 import com.example.todo2.filter.LoginFilter;
 import jakarta.servlet.Filter;
