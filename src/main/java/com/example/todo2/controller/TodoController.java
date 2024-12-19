@@ -1,12 +1,10 @@
 package com.example.todo2.controller;
 
-import com.example.todo2.dto.CreateTodoRequestDto;
-import com.example.todo2.dto.TodoResponseDto;
-import com.example.todo2.dto.UpdateTodoRequestDto;
-import com.example.todo2.dto.UserWithEmailResponseDto;
+import com.example.todo2.dto.*;
 import com.example.todo2.service.TodoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -80,5 +78,21 @@ public class TodoController {
     public ResponseEntity<Void> deleteTodo(@PathVariable Long id) {
         todoService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    /**
+     * 일정 페이징 조회
+     * @param page
+     * @param size
+     * @return
+     */
+    @GetMapping("/gettodos")
+    public ResponseEntity<Page<TodoPageResponseDto>> getTodos(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Page<TodoPageResponseDto> todos = todoService.getTodosWithPagination(page, size);
+
+        return ResponseEntity.ok(todos);
     }
 }
