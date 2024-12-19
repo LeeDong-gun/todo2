@@ -1,5 +1,4 @@
 # todo2
-Lv1\
 API명세서
 
 | **기능**           | **설명**       | **HTTP Method** | **Endpoint**                     | **body**                                                              |
